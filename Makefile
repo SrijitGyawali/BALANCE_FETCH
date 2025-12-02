@@ -1,4 +1,4 @@
-.PHONY: help install install-frontend install-backend setup-frontend setup-backend dev build start lint type-check clean check-env test test-backend test-all test-ethereum test-polygon test-base test-unit
+.PHONY: help install install-frontend install-backend setup-frontend setup-backend dev build start lint type-check clean check-env test test-backend test-all test-ethereum test-polygon test-base test-unit fetch-eth fetch-ethereum fetch-polygon fetch-base
 
 # Default target
 .DEFAULT_GOAL := help
@@ -245,6 +245,64 @@ test-api: ## Test balance fetching with real API (usage: make test-api NETWORK=e
 			cd backend && $(PYTHON) test_balance_cli.py $(NETWORK) $(ADDRESS) --all-tokens; \
 		else \
 			cd backend && $(PYTHON) test_balance_cli.py $(NETWORK) $(ADDRESS); \
+		fi; \
+	else \
+		echo "$(RED)✗ backend/ directory not found$(NC)"; \
+		exit 1; \
+	fi
+
+##@ Balance Fetching
+
+fetch-eth: fetch-ethereum ## Alias for fetch-ethereum
+
+fetch-ethereum: ## Fetch Ethereum balance (usage: make fetch-ethereum ADDRESS=0x...)
+	@echo "$(BLUE)Fetching Ethereum balance...$(NC)"
+	@if [ -z "$(ADDRESS)" ]; then \
+		echo "$(RED)✗ Usage: make fetch-ethereum ADDRESS=0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb$(NC)"; \
+		echo "$(YELLOW)  Optional: TOKEN=USDC (to fetch specific token balance)$(NC)"; \
+		exit 1; \
+	fi
+	@if [ -d backend ]; then \
+		if [ -n "$(TOKEN)" ]; then \
+			cd backend && $(PYTHON) test_balance_cli.py ethereum $(ADDRESS) $(TOKEN); \
+		else \
+			cd backend && $(PYTHON) test_balance_cli.py ethereum $(ADDRESS); \
+		fi; \
+	else \
+		echo "$(RED)✗ backend/ directory not found$(NC)"; \
+		exit 1; \
+	fi
+
+fetch-polygon: ## Fetch Polygon balance (usage: make fetch-polygon ADDRESS=0x...)
+	@echo "$(BLUE)Fetching Polygon balance...$(NC)"
+	@if [ -z "$(ADDRESS)" ]; then \
+		echo "$(RED)✗ Usage: make fetch-polygon ADDRESS=0xde881c6c4f469cca1dfc226dcdc98f98d5e17840$(NC)"; \
+		echo "$(YELLOW)  Optional: TOKEN=USDC (to fetch specific token balance)$(NC)"; \
+		exit 1; \
+	fi
+	@if [ -d backend ]; then \
+		if [ -n "$(TOKEN)" ]; then \
+			cd backend && $(PYTHON) test_balance_cli.py polygon $(ADDRESS) $(TOKEN); \
+		else \
+			cd backend && $(PYTHON) test_balance_cli.py polygon $(ADDRESS); \
+		fi; \
+	else \
+		echo "$(RED)✗ backend/ directory not found$(NC)"; \
+		exit 1; \
+	fi
+
+fetch-base: ## Fetch Base balance (usage: make fetch-base ADDRESS=0x...)
+	@echo "$(BLUE)Fetching Base balance...$(NC)"
+	@if [ -z "$(ADDRESS)" ]; then \
+		echo "$(RED)✗ Usage: make fetch-base ADDRESS=0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb$(NC)"; \
+		echo "$(YELLOW)  Optional: TOKEN=USDC (to fetch specific token balance)$(NC)"; \
+		exit 1; \
+	fi
+	@if [ -d backend ]; then \
+		if [ -n "$(TOKEN)" ]; then \
+			cd backend && $(PYTHON) test_balance_cli.py base $(ADDRESS) $(TOKEN); \
+		else \
+			cd backend && $(PYTHON) test_balance_cli.py base $(ADDRESS); \
 		fi; \
 	else \
 		echo "$(RED)✗ backend/ directory not found$(NC)"; \

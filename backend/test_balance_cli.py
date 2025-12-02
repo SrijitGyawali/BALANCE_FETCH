@@ -7,7 +7,7 @@ Usage:
     
 Examples:
     python test_balance_cli.py ethereum 0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb
-    python test_balance_cli.py polygon 0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb
+    python3 test_balance_cli.py polygon 0xde881c6c4f469cca1dfc226dcdc98f98d5e17840
     python test_balance_cli.py base 0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb
     python test_balance_cli.py ethereum 0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb USDC
 """
@@ -16,6 +16,7 @@ import asyncio
 import os
 import sys
 from typing import Optional
+from dotenv import load_dotenv
 
 
 async def test_native_balance(network: str, address: str, api_key: str):
@@ -373,30 +374,16 @@ async def test_all_tokens(network: str, address: str, api_key: str):
 
 def load_env_file():
     """Load environment variables from .env file."""
-    env_file = ".env"
-    if not os.path.exists(env_file):
-        env_file = ".env.local"
-    
-    if os.path.exists(env_file):
-        try:
-            with open(env_file, "r") as f:
-                for line in f:
-                    line = line.strip()
-                    # Skip comments and empty lines
-                    if not line or line.startswith("#"):
-                        continue
-                    # Handle both "KEY=value" and "export KEY=value" formats
-                    if line.startswith("export "):
-                        line = line[7:]  # Remove "export "
-                    if "=" in line:
-                        key, value = line.split("=", 1)
-                        key = key.strip()
-                        value = value.strip().strip('"').strip("'")
-                        # Only set if not already in environment
-                        if key and value and not os.getenv(key):
-                            os.environ[key] = value
-        except Exception as e:
-            print(f"⚠️  Warning: Could not load .env file: {e}")
+    # Try to load .env file from current directory (backend/)
+    env_loaded = load_dotenv(".env")
+    if not env_loaded:
+        # Try .env.local as fallback
+        env_loaded = load_dotenv(".env.local")
+    if not env_loaded:
+        # Try parent directory (project root)
+        env_loaded = load_dotenv("../.env")
+        if not env_loaded:
+            load_dotenv("../.env.local")
 
 
 async def main():
