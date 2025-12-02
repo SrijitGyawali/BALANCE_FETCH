@@ -1,0 +1,66 @@
+# Docker Compose configuration specifically for running tests
+# Usage: docker-compose -f docker-compose.test.yml up
+
+services:
+  # Backend service for running tests
+  backend-test:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: get-balance-backend-test
+    volumes:
+      - ./backend:/app
+      - backend-test-cache:/app/.pytest_cache
+    environment:
+      - THEGRAPH_API_KEY=${THEGRAPH_API_KEY:-}
+    env_file:
+      - ./.env
+    networks:
+      - test-network
+    # Override command to run specific tests
+    # Can be overridden: docker-compose -f docker-compose.test.yml run backend-test pytest tests/ethereum/ -v
+    command: pytest tests/ -v
+
+  # Run all tests
+  test-all:
+    extends: backend-test
+    container_name: get-balance-test-all
+    command: pytest tests/ -v
+
+  # Run Ethereum tests
+  test-ethereum:
+    extends: backend-test
+    container_name: get-balance-test-ethereum
+    command: pytest tests/ethereum/ -v
+
+  # Run Polygon tests
+  test-polygon:
+    extends: backend-test
+    container_name: get-balance-test-polygon
+    command: pytest tests/polygon/ -v
+
+  # Run Base tests
+  test-base:
+    extends: backend-test
+    container_name: get-balance-test-base
+    command: pytest tests/base/ -v
+
+  # Run unit tests
+  test-unit:
+    extends: backend-test
+    container_name: get-balance-test-unit
+    command: pytest tests/unit/ -v
+
+  # Run integration tests
+  test-integration:
+    extends: backend-test
+    container_name: get-balance-test-integration
+    command: pytest tests/integration/ -v
+
+volumes:
+  backend-test-cache:
+
+networks:
+  test-network:
+    driver: bridge
+

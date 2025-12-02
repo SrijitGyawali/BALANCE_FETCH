@@ -1,0 +1,6 @@
+"""
+Ethereum balance client tests.
+"""
+
+
+

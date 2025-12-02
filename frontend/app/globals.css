@@ -1,0 +1,822 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+.container {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  padding: 2rem;
+  max-width: 1200px;
+  width: 100%;
+}
+
+h1 {
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.description {
+  color: #666;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.wallet-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+}
+
+.wallet-info {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: #e8f5e9;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #2e7d32;
+  word-break: break-all;
+}
+
+.balances-section {
+  margin-top: 2rem;
+}
+
+.token-balances {
+  width: 100%;
+}
+
+.token-balances-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.token-balances-header h2 {
+  color: #1a1a1a;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.total-usd {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.token-list {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+tbody tr {
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.2s;
+}
+
+tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+td {
+  padding: 1rem;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.token-balances-loading,
+.token-balances-error,
+.token-balances-empty {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.token-balances-error {
+  color: #d32f2f;
+}
+
+.token-balances-error button {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.token-balances-error button:hover {
+  background: #5568d3;
+}
+
+.chains-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.chain-section {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #e0e0e0;
+}
+
+.chain-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.chain-header h3 {
+  color: #1a1a1a;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.chain-total {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #667eea;
+  margin: 0;
+}
+
+.native-balance {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid #667eea;
+}
+
+.native-balance .token-name {
+  font-weight: 600;
+  color: #1a1a1a;
+  font-size: 1rem;
+}
+
+.native-balance .token-balance {
+  font-weight: 700;
+  color: #667eea;
+  font-size: 1.1rem;
+}
+
+.no-tokens {
+  text-align: center;
+  padding: 2rem;
+  color: #999;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  .token-balances-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .chain-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .chain-header h3 {
+    font-size: 1.2rem;
+  }
+
+  .chain-total {
+    font-size: 1rem;
+  }
+
+  .native-balance {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  table {
+    font-size: 0.85rem;
+  }
+
+  th,
+  td {
+    padding: 0.75rem 0.5rem;
+  }
+}
+
+/* Address Checker Styles */
+.address-checker-section {
+  margin-top: 3rem;
+  padding-top: 3rem;
+  border-top: 2px solid #e0e0e0;
+}
+
+.address-checker {
+  width: 100%;
+}
+
+.address-checker-header {
+  margin-bottom: 1.5rem;
+}
+
+.address-checker-header h2 {
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.address-checker-header .description {
+  color: #666;
+  font-size: 1rem;
+  margin-bottom: 0;
+}
+
+.address-input-section {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.address-input {
+  flex: 1;
+  min-width: 300px;
+  padding: 0.875rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Courier New', monospace;
+  transition: border-color 0.2s;
+}
+
+.address-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.address-input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.check-button {
+  padding: 0.875rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
+}
+
+.check-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.check-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.address-checker-error {
+  background: #fee;
+  border: 1px solid #fcc;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  color: #c33;
+}
+
+.address-checker-error button {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #c33;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.checked-address-info {
+  background: #f0f0f0;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.checked-address-info code {
+  background: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  color: #667eea;
+  font-weight: 600;
+}
+
+.address-balances-results {
+  margin-top: 2rem;
+}
+
+.address-balances-results .total-usd {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.address-balances-results .total-usd h3 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.chain-balance-section {
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e0e0e0;
+}
+
+.chain-balance-section .chain-name {
+  color: #1a1a1a;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 0.5rem;
+}
+
+.chain-balance-section .native-balance {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border-left: 4px solid #667eea;
+}
+
+.chain-balance-section .native-balance p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.chain-balance-section .tokens-list {
+  margin-top: 1rem;
+}
+
+.chain-balance-section .tokens-list h4 {
+  color: #666;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.chain-balance-section .tokens-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.chain-balance-section .token-item {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  transition: box-shadow 0.2s;
+}
+
+.chain-balance-section .token-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chain-balance-section .token-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.chain-balance-section .token-symbol {
+  font-weight: 700;
+  color: #1a1a1a;
+  font-size: 1rem;
+}
+
+.chain-balance-section .token-name {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.chain-balance-section .token-balance {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.chain-balance-section .token-balance span:first-child {
+  font-weight: 600;
+  color: #1a1a1a;
+  font-family: 'Courier New', monospace;
+}
+
+.chain-balance-section .token-usd {
+  color: #667eea;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.chain-balance-section .token-usd-warning {
+  color: #ff6b6b;
+  font-weight: 700;
+}
+
+.chain-balance-section .no-tokens {
+  text-align: center;
+  padding: 1.5rem;
+  color: #999;
+  font-style: italic;
+  background: white;
+  border-radius: 8px;
+}
+
+.chain-balance-section .chain-total {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid #e0e0e0;
+  text-align: right;
+}
+
+.chain-balance-section .chain-total p {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.address-balances-results .no-balances {
+  text-align: center;
+  padding: 3rem;
+  color: #999;
+  font-style: italic;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .address-input-section {
+    flex-direction: column;
+  }
+
+  .address-input {
+    min-width: 100%;
+  }
+
+  .check-button {
+    width: 100%;
+  }
+
+  .chain-balance-section .token-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .chain-balance-section .token-balance {
+    align-items: flex-start;
+  }
+
+  .chain-balance-section .chain-total {
+    text-align: left;
+  }
+}
+
+/* Address Checker Styles */
+.address-checker-section {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid #e0e0e0;
+}
+
+.address-checker {
+  width: 100%;
+}
+
+.address-checker-header h2 {
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.address-input-section {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.address-input {
+  flex: 1;
+  min-width: 300px;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Courier New', monospace;
+  transition: border-color 0.2s;
+}
+
+.address-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.address-input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.check-button {
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.check-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.check-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.address-checker-error {
+  background: #fee;
+  border: 1px solid #fcc;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  color: #c33;
+}
+
+.address-checker-error button {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #c33;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.checked-address-info {
+  background: #f0f0f0;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.checked-address-info code {
+  background: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  color: #667eea;
+}
+
+.address-balances-results {
+  margin-top: 1.5rem;
+}
+
+.address-balances-results .total-usd {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.address-balances-results .total-usd h3 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.address-balances-results .chain-balance-section {
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e0e0e0;
+}
+
+.address-balances-results .chain-name {
+  color: #1a1a1a;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 0.5rem;
+}
+
+.address-balances-results .tokens-list {
+  margin-top: 1rem;
+}
+
+.address-balances-results .tokens-list h4 {
+  color: #666;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.address-balances-results .tokens-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.address-balances-results .token-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.address-balances-results .token-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.address-balances-results .token-symbol {
+  font-weight: 700;
+  color: #1a1a1a;
+  font-size: 1rem;
+}
+
+.address-balances-results .token-name {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.address-balances-results .token-balance {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.address-balances-results .token-usd {
+  font-size: 0.85rem;
+  color: #667eea;
+  font-weight: 600;
+}
+
+.address-balances-results .no-tokens,
+.address-balances-results .no-balances {
+  text-align: center;
+  padding: 2rem;
+  color: #999;
+  font-style: italic;
+}
+
+.address-balances-results .chain-total {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+  text-align: right;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #667eea;
+}
+
+@media (max-width: 768px) {
+  .address-input-section {
+    flex-direction: column;
+  }
+
+  .address-input {
+    min-width: 100%;
+  }
+
+  .check-button {
+    width: 100%;
+  }
+
+  .address-balances-results .token-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .address-balances-results .token-balance {
+    align-items: flex-start;
+  }
+}
+
+
+
+

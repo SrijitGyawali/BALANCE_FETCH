@@ -1,0 +1,48 @@
+services:
+  # Backend service for running tests
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: get-balance-backend
+    volumes:
+      - ./backend:/app
+      - backend-cache:/app/.pytest_cache
+    environment:
+      - THEGRAPH_API_KEY=${THEGRAPH_API_KEY}
+    env_file:
+      - ./.env
+    command: pytest tests/ -v
+    networks:
+      - get-balance-network
+
+  # Frontend service for development
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: get-balance-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NEXT_PUBLIC_THEGRAPH_API_KEY=${NEXT_PUBLIC_THEGRAPH_API_KEY}
+      - NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=${NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID}
+    env_file:
+      - ./.env
+    command: npm run dev
+    networks:
+      - get-balance-network
+    depends_on:
+      - backend
+
+volumes:
+  backend-cache:
+
+networks:
+  get-balance-network:
+    driver: bridge
+
